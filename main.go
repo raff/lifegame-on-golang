@@ -1,14 +1,14 @@
 package main
 
 import (
-	"rand"
+	"math/rand"
 	"time"
 )
 
 type LifeGame struct {
-	board [][]bool
+	board    [][]bool
 	row, col int
-	time int
+	time     int
 }
 
 func (p *LifeGame) Init(row, col int) *LifeGame {
@@ -19,7 +19,7 @@ func (p *LifeGame) Init(row, col int) *LifeGame {
 	for r := 0; r < row; r++ {
 		p.board[r] = make([]bool, col)
 		for c := 0; c < col; c++ {
-			if rand.Float() < 0.3 {
+			if rand.Float32() < 0.3 {
 				p.board[r][c] = true
 			}
 		}
@@ -47,7 +47,6 @@ func (p *LifeGame) Print() {
 	}
 }
 
-
 func (p *LifeGame) count_now_alive(r, c int) (i int) {
 	if r < 0 {
 		r += p.row
@@ -69,22 +68,22 @@ func (p *LifeGame) count_now_alive(r, c int) (i int) {
 	return i
 }
 func (p *LifeGame) is_dead_or_alive(r, c int) (b bool) {
-	count := p.count_now_alive(r - 1, c - 1) +
-		 p.count_now_alive(r - 1, c    ) +
-		 p.count_now_alive(r - 1, c + 1) +
-		 p.count_now_alive(r    , c - 1) +
-		 p.count_now_alive(r    , c    ) +
-		 p.count_now_alive(r    , c + 1) +
-		 p.count_now_alive(r + 1, c - 1) +
-		 p.count_now_alive(r + 1, c    ) +
-		 p.count_now_alive(r + 1, c + 1)
+	count := p.count_now_alive(r-1, c-1) +
+		p.count_now_alive(r-1, c) +
+		p.count_now_alive(r-1, c+1) +
+		p.count_now_alive(r, c-1) +
+		p.count_now_alive(r, c) +
+		p.count_now_alive(r, c+1) +
+		p.count_now_alive(r+1, c-1) +
+		p.count_now_alive(r+1, c) +
+		p.count_now_alive(r+1, c+1)
 	switch count {
-		case 3:
-			b = true
-		case 4:
-			b = p.board[r][c]
-		default:
-			b = false
+	case 3:
+		b = true
+	case 4:
+		b = p.board[r][c]
+	default:
+		b = false
 	}
 	return b
 }
@@ -103,7 +102,6 @@ func generate_gen(game *LifeGame, ch chan<- *LifeGame) {
 	}
 }
 
-
 func main() {
 	game := new(LifeGame).Init(10, 10)
 	game.Print()
@@ -115,4 +113,3 @@ func main() {
 		time.Sleep(1e9)
 	}
 }
-
